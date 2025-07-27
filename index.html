@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saptadeep | Business Analytics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         /* San Francisco font stack */
         @font-face {
@@ -51,6 +52,11 @@
             --white: #ffffff;
             --accent: #f5f5f5;
             --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        html, body {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
         }
 
         body {
@@ -742,6 +748,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -881,9 +888,14 @@
     </footer>
     
     <script>
-        (function() {
-            // ===== Intersection Observer (for fade‑in animations) =====
-            document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+            // === Smooth Scroll to Target ===
+            const target = document.querySelector("#some-id");
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // === Intersection Observer (Fade-in Animations) ===
             const observerOptions = {
                 root: null,
                 rootMargin: '0px',
@@ -891,59 +903,42 @@
             };
             const observer = new IntersectionObserver((entries, obs) => {
                 entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                    obs.unobserve(entry.target);
-                }
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        obs.unobserve(entry.target);
+                    }
                 });
             }, observerOptions);
 
             document.querySelectorAll(
                 '.section-title, .about-card, .project-card, .social-card, .skill-category'
             ).forEach(el => {
-                // start elements off invisible/moved in your CSS:
-                // opacity: 0; transform: translateY(20px); transition: opacity .6s, transform .6s;
                 observer.observe(el);
             });
-            });
+        });
 
-            // ===== Prevent Right‑Click & DevTools Shortcuts =====
+        // === Prevent Right-Click & DevTools ===
+        (function () {
             function blockEvent(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
             }
 
-            // Right‑click
+            // Block right-click
             document.addEventListener('contextmenu', blockEvent, { passive: false });
 
-            // Keydown combos
-            document.addEventListener('keydown', function(e) {
-            const key = e.key.toUpperCase();
-            const ctrlOrCmd = e.ctrlKey || e.metaKey;
+            // Block common DevTools shortcuts
+            document.addEventListener('keydown', function (e) {
+                const key = e.key.toUpperCase();
+                const ctrlOrCmd = e.ctrlKey || e.metaKey;
 
-            // F12
-            if (key === 'F12') {
-                return blockEvent(e);
-            }
-
-            // Ctrl/Cmd + Shift + [I, J, C]
-            if (ctrlOrCmd && e.shiftKey && ['I','J','C'].includes(key)) {
-                return blockEvent(e);
-            }
-
-            // Ctrl/Cmd + [U, S, P]
-            if (ctrlOrCmd && ['U','S','P'].includes(key)) {
-                return blockEvent(e);
-            }
+                if (key === 'F12') return blockEvent(e);
+                if (ctrlOrCmd && e.shiftKey && ['I', 'J', 'C'].includes(key)) return blockEvent(e);
+                if (ctrlOrCmd && ['U', 'S', 'P'].includes(key)) return blockEvent(e);
             }, { passive: false });
         })();
     </script>
-
 </body>
 </html>
-
-
-
-
